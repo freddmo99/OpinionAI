@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You Are Here</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow: hidden; /* Prevent the form from scrolling */
+        }
+
+        form {
+            margin: 20px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .image-gallery-container {
+            flex: 1;
+            width: 80%;
+            overflow-y: auto; /* Make the image section scrollable */
+        }
+
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            justify-items: center;
+            margin-bottom: 20px;
+        }
+
+        .image-gallery img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .image-card {
+            text-align: center;
+            width: 100%;
+            padding: 10px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-card h4 {
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+
+        .image-card p {
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Upload a Photo</h1>
+    </header>
+
+    <div class="container">
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="file_name" required>
+            <input type="submit" value="Upload">
+        </form>
+
+        <h3>Sign Out</h3>
+        <form method="POST" action="/logout">
+            <button type="submit">Sign Out</button>
+        </form>
+
+        <h2>Uploaded Images</h2>
+        <div class="image-gallery-container">
+            <div class="image-gallery">
+                {% for image, data in images.items() %}
+                    <div class="image-card">
+                        <a href="{{ url_for('serve_image_route', filename=image) }}">
+                            <img src="{{ url_for('serve_image_route', filename=image) }}" alt="{{ image }}">
+                        </a>
+                        <h4>{{ data.title }}</h4> <!-- Displaying the title instead of the filename -->
+                        <p>{{ data.description }}</p> <!-- Displaying the description -->
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
